@@ -25,10 +25,9 @@ import javafx.stage.Stage;
 
 public class MonthView extends KeyInfo
 {
-	public static void Main (String[] args) { launch(args); } 
+	public static void start (String[] args) { launch(args); } 
 	
-	@Override
-	public void start(Stage stage) throws Exception //Later, call it from Main.java
+	public void Month(Stage stage) throws Exception
 	{
 		stage.setFullScreen(true);
 		stage.setResizable(false); //For now
@@ -57,7 +56,6 @@ public class MonthView extends KeyInfo
     	clkDyOfWk.setGraphic(weekdays);
     	
     	scene.getStylesheets().add(getClass().getResource("Style.css").toExternalForm());
-    	
     	
     	int countOfDays = 1; //For Feb 2025
     	GridPane monthbox = new GridPane();

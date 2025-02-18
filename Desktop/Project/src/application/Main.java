@@ -64,10 +64,17 @@ public class Main extends Login {
                 public void handle(ActionEvent arg0) { 
                     logIn.setOnAction(event->Login.LoginPage(primaryStage, scene.getWidth(), scene.getHeight()));
                 }  
-            });  
+            });
         	
         	Button signUp = new Button("Sign Up");
-        	logIn.getStyleClass().add("button");
+        	signUp.getStyleClass().add("button");
+        	
+        	signUp.setOnAction(new EventHandler<ActionEvent>() {  
+                @Override
+                public void handle(ActionEvent arg0) { 
+                    signUp.setOnAction(event->SignUp.SignupPage(primaryStage, scene.getWidth(), scene.getHeight()));
+                }  
+            });
         	
         	logSignButtons.getChildren().addAll(logIn, signUp);
             logSignButtons.setAlignment(Pos.BOTTOM_CENTER);
@@ -97,7 +104,6 @@ public class Main extends Login {
     	VBox.setMargin(wlcm, new Insets(220, 0, 0, 0));
     	
     	root.getChildren().addAll(vbWlcm, vbMessage);
-    	root.getStylesheets().add("Style.css");
     	
     	primaryStage.show();
 
@@ -105,6 +111,6 @@ public class Main extends Login {
     
     public static void main (String[] args)  
     {  
-        launch(args);  
+        launch(args);
     }  
 }

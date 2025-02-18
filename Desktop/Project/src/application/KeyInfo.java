@@ -16,12 +16,33 @@ public class KeyInfo extends Application {
 	
 	static protected Image icon = new Image("CalendarIcon.jpg");
 	//static protected Image menu = new Image("");
-	static protected Stop[] stops = new Stop[] { new Stop(0, Color.rgb(4,68,41)), new Stop(1, Color.rgb(4,12,69))}; //green to blue
+	static protected Stop[] stops = new Stop[] { new Stop(0, Color.rgb(4,68,41)), new Stop(0.25, Color.rgb(4,54,48)), new Stop(0.5, Color.rgb(4,40,55)), new Stop(0.75, Color.rgb(4,26,62)), new Stop(1, Color.rgb(4,12,69))};
     static protected LinearGradient linear = new LinearGradient(0, 0, 1, 0, true, CycleMethod.REPEAT, stops); //Enter more stops
-
 	static String[] weeks = new String[7];
 	static protected int firstDayOfWeek=0; //Saturday
 	protected static boolean isLoggedIn = false;
+	
+	static protected String styleRegularLabel = "-fx-font-family: Onest; -fx-font-size: 20px; -fx-text-fill: white;";
+	static protected String styleButtonLabel  = "-fx-background-insets: 0;"
+												+ "-fx-text-fill: white; "
+												+ "-fx-padding: 10 10 10 10; "
+												+ "-fx-cursor: pointer; "
+												+ "-fx-alignment: center; "
+												+ "-fx-font-family: Onest; "
+												+ "-fx-border-width: 1px; ";
+	static protected String styleMainHover 	  = "-fx-background-color: linear-gradient(to right, #436642, #4E4F83); /*Lighter green on hover*/";
+	static protected String styleMainPressed = "-fx-background-color: linear-gradient(to right, #436642, #4E4F83);\r\n"
+			+ "    -fx-effect: innershadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );\r\n"
+			+ "    -fx-text-fill: #50CAC1;";
+	static protected String sBL_2 = styleButtonLabel
+			+ "-fx-background-color: transparent;"
+			+ "-fx-background-radius: 3.75;  /*Rounded corners*/"
+			+ "-fx-font-size: 16px;"
+			+ "-fx-border-radius: 3.75;"
+			+ "-fx-border-color: white;"
+			+ "-fx-pref-width: 88px;"
+			+ "-fx-pref-height: 35px";
+	//
 
     public static boolean isLoggedIn() {
         return isLoggedIn;
@@ -46,5 +67,8 @@ public class KeyInfo extends Application {
 
 	@Override
 	public void start(Stage arg0) throws Exception {}
-	//public void start(Stage primaryStage) throws Exception { } //from LoginSession
+	public void Month(Stage stage) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
 }
