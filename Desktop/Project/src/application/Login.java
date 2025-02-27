@@ -55,17 +55,16 @@ public class Login extends SignUp {
 				+ "-fx-font-size: 16px;");
 		
 		Button loginButton = new Button("Login");
-		loginButton.setStyle(sBL_2);
+		loginButton.setStyle(sBL_2 + "-fx-pref-width: 88px; -fx-pref-height: 35px");
 		//These don't work w/ mouse
 		loginButton.setOnMouseEntered(e->loginButton.setStyle(styleMainHover));
-		loginButton.setOnMouseExited(e->loginButton.setStyle(sBL_2));
+		loginButton.setOnMouseExited(e->loginButton.setStyle(sBL_2 + "-fx-pref-width: 88px; -fx-pref-height: 35px"));
 		loginButton.setOnMouseClicked(e->loginButton.setStyle(styleMainPressed));
 		HBox lb = new HBox();
 		lb.getChildren().addAll(loginButton);
 		lb.setAlignment(Pos.CENTER);
 		//Center everything
 		
-		//what to do when Login is pressed
 		loginButton.setOnAction(event -> {
 			String enteredUn = unField.getText();
 			String enteredPw = pwField.getText();

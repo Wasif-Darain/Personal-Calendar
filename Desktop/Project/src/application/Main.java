@@ -1,21 +1,16 @@
 package application;
 
-import javafx.application.Application;  
 import javafx.event.ActionEvent;  
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;  
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;  
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
@@ -84,13 +79,9 @@ public class Main extends Login {
     	}
     	else
     	{
-    		openNewAcc.setTextAlignment(TextAlignment.CENTER);
-    		openNewAcc.setFill(Color.WHITE);
-    		openNewAcc.setFont(Font.font("Onest", FontWeight.NORMAL, FontPosture.REGULAR, 25));
-    		openNewAcc.setBoundsType(TextBoundsType.VISUAL);
-        	vb3.setAlignment(Pos.TOP_CENTER);
-        	vb3.getChildren().add(openNewAcc);
-        	VBox.setMargin(openNewAcc, new Insets(230, 0, 0, 0));
+    		//enter all attributes
+    		MonthView mv=new MonthView();
+    		mv.Month(primaryStage);
     	}
     	
     	Text wlcm = new Text("Welcome");

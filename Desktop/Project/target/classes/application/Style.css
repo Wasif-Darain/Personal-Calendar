@@ -1,0 +1,56 @@
+.button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 3.75;  /*Rounded corners*/
+    -fx-background-insets: 0;
+    -fx-font-size: 16px;
+    -fx-text-fill: white;
+    -fx-padding: 10 10 10 10;
+    -fx-cursor: pointer;
+    -fx-alignment: center;
+    -fx-font-family: Onest;
+    -fx-border-radius: 3.75;
+    -fx-border-color: white;
+    -fx-border-width: 1px;
+    -fx-pref-width: 88px;
+}
+
+.button:hover {
+    -fx-background-color: linear-gradient(to right, #436642, #4E4F83); /*Lighter green on hover*/ 
+}
+
+.button:pressed {
+    -fx-background-color: linear-gradient(to right, #436642, #4E4F83);
+    -fx-effect: innershadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+    -fx-text-fill: #50CAC1;  /*Lighter text color when pressed*/ 
+}
+
+#dateclk {
+    -fx-background-color: #050332;
+    -fx-font-family: Onest;
+    -fx-background-radius: 0;
+    -fx-text-fill: white;
+    -fx-font-size: 25px;
+    -fx-alignment: TOP-RIGHT;
+    -fx-padding: 0 0 0 0;
+    -fx-border-radius: 0;
+    -fx-border-color: white;
+    -fx-border-width: 0px;
+    -fx-pref-width: 185px;
+    -fx-pref-height: 110px;
+}
+
+#dateclk:hover {
+    -fx-background-color: linear-gradient(to left, #878686, #1D0577); /*radial-gradient(focus-distance 0% 0%, center 50% 50%, radius 50%, #EEFB09, #050332);*/
+    -fx-font-size: 27px;
+    -fx-cursor: pointer;
+}
+
+#loginBg {
+	-fx-background-color: rgba(255, 255, 255, .15);
+}
+
+/*#labelFont {
+	-fx-font-family: Onest;
+	-fx-font-size: 25px;
+	-fx-text-fill: white;
+}*/

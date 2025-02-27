@@ -1,6 +1,5 @@
 package application;
 
-import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -8,11 +7,17 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.stage.Stage;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
-public class KeyInfo extends Application {
+public class KeyInfo extends APIAUth {
 	//Later, store some of these in the database
 	protected static final String ACTUAL_USERNAME = "adm";
 	protected static final String ACTUAL_PASSWORD = "123";
+	protected static String dbUrl = "jdbc:mysql://localhost:3306/d1";
+	protected static String dbUsername = "Wasif";
+	protected static String dbPassword = "abcd";
 	
 	static protected Image icon = new Image("CalendarIcon.jpg");
 	//static protected Image menu = new Image("");
@@ -39,11 +44,23 @@ public class KeyInfo extends Application {
 			+ "-fx-background-radius: 3.75;  /*Rounded corners*/"
 			+ "-fx-font-size: 16px;"
 			+ "-fx-border-radius: 3.75;"
-			+ "-fx-border-color: white;"
-			+ "-fx-pref-width: 88px;"
-			+ "-fx-pref-height: 35px";
-	//
-
+			+ "-fx-border-color: white;";
+	
+	public static void dbConnect()
+	{
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver"); // Ensure you have the right class name
+			Connection connection = DriverManager.getConnection(dbUrl, dbUsername, dbPassword);
+	        System.out.println("Connected to the database!");
+	    } catch (SQLException e) {
+	        System.out.println("Failed to connect to the database.");
+	        e.printStackTrace();
+	    } catch (ClassNotFoundException e) {
+	        System.out.println("JDBC Driver not found.");
+	        e.printStackTrace();
+	    }
+	}
+	
     public static boolean isLoggedIn() {
         return isLoggedIn;
     }
