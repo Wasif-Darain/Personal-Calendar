@@ -11,7 +11,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class KeyInfo extends APIAUth {
+public class KeyInfo extends APIAuth {
 	//Later, store some of these in the database
 	protected static final String ACTUAL_USERNAME = "adm";
 	protected static final String ACTUAL_PASSWORD = "123";
@@ -25,7 +25,7 @@ public class KeyInfo extends APIAUth {
     static protected LinearGradient linear = new LinearGradient(0, 0, 1, 0, true, CycleMethod.REPEAT, stops); //Enter more stops
 	static String[] weeks = new String[7];
 	static protected int firstDayOfWeek=0; //Saturday
-	protected static boolean isLoggedIn = false;
+	protected static boolean isLoggedIn = true; //For now
 	
 	static protected String styleRegularLabel = "-fx-font-family: Onest; -fx-font-size: 20px; -fx-text-fill: white;";
 	static protected String styleButtonLabel  = "-fx-background-insets: 0;"

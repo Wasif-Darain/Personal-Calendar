@@ -79,9 +79,9 @@ public class Main extends Login {
     	}
     	else
     	{
-    		//enter all attributes
+    		//enter all attributes so that specific version is generated
     		MonthView mv=new MonthView();
-    		mv.Month(primaryStage);
+    		mv.Month(primaryStage, 800, 770);
     	}
     	
     	Text wlcm = new Text("Welcome");

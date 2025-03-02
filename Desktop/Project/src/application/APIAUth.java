@@ -27,7 +27,7 @@ import java.security.GeneralSecurityException;
 import java.util.Collections;
 import java.util.List;
 
-public class APIAUth extends Application {
+public class APIAuth extends Application {
 
 	@Override
 	public void start(Stage arg0) throws Exception {

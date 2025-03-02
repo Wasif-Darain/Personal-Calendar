@@ -101,7 +101,7 @@ public class SignUp extends MonthView {
 	            //pause.play();
 	            try {
 					MonthView monthView = new MonthView(); //Calendar generated
-					monthView.Month(suStage);
+					monthView.Month(suStage, sceneW, sceneH);
 				} catch (Exception e1) { //If fails to open that scene
 					// TODO Auto-generated catch block
 					e1.printStackTrace(); //Write more meaningful error messages
