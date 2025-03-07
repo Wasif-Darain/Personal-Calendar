@@ -1,5 +1,10 @@
 package application;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -13,12 +18,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
-public class Login extends SignUp {
+public class Login extends KeyInfo {
 	
 	@Override
 	public void start(Stage arg0) throws Exception { }
 
-	protected static void LoginPage(Stage liStage, double sceneW, double sceneH) {
+	protected void LoginPage(Stage liStage, double sceneW, double sceneH, Connection connection, DBConnect dbConnect) {
 		liStage.setTitle("Log In");
 		
 		StackPane root=new StackPane();
@@ -27,19 +32,19 @@ public class Login extends SignUp {
     	Scene scene=new Scene(root, sceneW, sceneH, linear);
     	
     	//Fit sizes of text field
-		Label usernameLabel = new Label("Username:");
-		usernameLabel.setStyle(styleRegularLabel + "-fx-font-size: 16px;");
+		Label emailLabel = new Label("Email:");
+		emailLabel.setStyle(styleRegularLabel + "-fx-font-size: 16px;");
 		Label passwordLabel = new Label("Password:");
 		passwordLabel.setStyle(styleRegularLabel + "-fx-font-size: 16px;");
-		TextField unField = new TextField();
-		unField.setMaxWidth(500);
-		unField.setMinHeight(30);
+		TextField emField = new TextField();
+		emField.setMaxWidth(500);
+		emField.setMinHeight(30);
 		PasswordField pwField = new PasswordField();
 		pwField.setMaxWidth(500);
 		pwField.setMinHeight(30);
-		HBox username = new HBox(10);
-		username.getChildren().addAll(usernameLabel, unField);
-		username.setAlignment(Pos.CENTER);
+		HBox email = new HBox(10);
+		email.getChildren().addAll(emailLabel, emField);
+		email.setAlignment(Pos.CENTER);
 		HBox password = new HBox(10);
 		password.getChildren().addAll(passwordLabel, pwField);
 		password.setAlignment(Pos.CENTER);
@@ -66,29 +71,47 @@ public class Login extends SignUp {
 		//Center everything
 		
 		loginButton.setOnAction(event -> {
-			String enteredUn = unField.getText();
+			String enteredEA = emField.getText();
 			String enteredPw = pwField.getText();
-			
-			if(enteredUn.equals(ACTUAL_USERNAME) && enteredPw.equals(ACTUAL_PASSWORD))
-				loginResultLabel.setText("Login Succesful!");
-			else
-				loginResultLabel.setText("Wrong credentials.");
-			
 			//Do something if Log In button pressed with any field empty
+			String qry = "SELECT * FROM usercredentials WHERE EmailAddress = ? AND Password = ?";
+			
+			try (PreparedStatement pstmt = connection.prepareStatement(qry)) {
+
+		        pstmt.setString(2, enteredEA);
+		        pstmt.setString(1, enteredPw);
+
+		        ResultSet rs = pstmt.executeQuery();
+
+		        if (rs.next()) {
+		        	dbConnect.setLoggedIn();
+		            loginResultLabel.setText("Login Successful!");
+		            try {
+      					MonthView monthView = new MonthView();
+      					monthView.Month(liStage, sceneW, sceneH, connection);
+      				} catch (Exception e1) {
+      					e1.printStackTrace(); //Write more meaningful error messages
+      				}
+		        } else {
+		            loginResultLabel.setText("Wrong credentials. Try again.");
+		        }
+
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		        loginResultLabel.setText("Database error.");
+		    }
 		});
 		
         //scene.getStylesheets().add(Login.class.getResource("Style.css").toExternalForm());
        
         VBox form = new VBox(20);
-        form.getChildren().addAll(username, password, lb, loginResultLabel);
+        form.getChildren().addAll(email, password, lb, loginResultLabel);
         form.setAlignment(Pos.CENTER);
         
         root.getChildren().addAll(form, loginRectangle);
         liStage.getIcons().add(icon);
         liStage.setScene(scene);
         liStage.show();
-        
-		//setLoggedIn(true);
 	}
 
 }

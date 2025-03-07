@@ -1,7 +1,7 @@
 package application;
 
-import javafx.event.ActionEvent;  
-import javafx.event.EventHandler;
+import java.sql.Connection;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;  
@@ -18,10 +18,13 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextBoundsType;
 
-public class Main extends Login {  
-  
+public class Main extends KeyInfo
+{  
     @Override  
     public void start(Stage primaryStage) throws Exception { 
+    	DBConnect dbConnect = new DBConnect();
+    	Connection connection = dbConnect.getConnection();
+    	boolean ili = dbConnect.isLoggedIn();
     	
     	StackPane root=new StackPane();
     	root.setStyle("-fx-background-color: transparent;");
@@ -41,7 +44,7 @@ public class Main extends Login {
     	Text openNewAcc = new Text("Open A New Account");
     	VBox vb3 = new VBox();
     	
-    	if(!isLoggedIn())
+    	if(!ili)
     	{
             notLoggedIn.setTextAlignment(TextAlignment.CENTER);
             notLoggedIn.setFill(Color.WHITE);
@@ -54,24 +57,22 @@ public class Main extends Login {
         	Button logIn = new Button("Log In");
         	logIn.getStyleClass().add("button");
         	
-        	logIn.setOnAction(new EventHandler<ActionEvent>() {  
-                @Override
-                public void handle(ActionEvent arg0) { 
-                    logIn.setOnAction(event->Login.LoginPage(primaryStage, scene.getWidth(), scene.getHeight()));
-                }  
-            });
+        	logIn.setOnAction(event -> 
+        	{
+        		Login login = new Login();
+        		login.LoginPage(primaryStage, scene.getWidth(), scene.getHeight(), connection, dbConnect);
+        	});
         	
-        	Button signUp = new Button("Sign Up");
-        	signUp.getStyleClass().add("button");
+        	Button signUpButton = new Button("Sign Up");
+        	signUpButton.getStyleClass().add("button");
         	
-        	signUp.setOnAction(new EventHandler<ActionEvent>() {  
-                @Override
-                public void handle(ActionEvent arg0) { 
-                    signUp.setOnAction(event->SignUp.SignupPage(primaryStage, scene.getWidth(), scene.getHeight()));
-                }  
-            });
+        	signUpButton.setOnAction(event -> 
+        	{
+        		SignUp sUp = new SignUp();
+        		sUp.SignupPage(primaryStage, firstDayOfWeek, firstDayOfWeek, connection);
+        	});
         	
-        	logSignButtons.getChildren().addAll(logIn, signUp);
+        	logSignButtons.getChildren().addAll(logIn, signUpButton);
             logSignButtons.setAlignment(Pos.BOTTOM_CENTER);
             
         	vbMessage.setAlignment(Pos.TOP_CENTER);
@@ -81,7 +82,7 @@ public class Main extends Login {
     	{
     		//enter all attributes so that specific version is generated
     		MonthView mv=new MonthView();
-    		mv.Month(primaryStage, 800, 770);
+    		mv.Month(primaryStage, 800, 770, connection);
     	}
     	
     	Text wlcm = new Text("Welcome");

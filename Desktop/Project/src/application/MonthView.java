@@ -1,23 +1,17 @@
 package application;
 
-import java.awt.TextArea;
-import java.awt.geom.Rectangle2D;
-
-import com.google.protobuf.UnsafeByteOperations;
+import java.sql.Connection;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.effect.BoxBlur;
-import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -25,7 +19,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextBoundsType;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -49,7 +42,7 @@ public class MonthView extends KeyInfo
 		return ap;
 	}
 	
-	public void Month(Stage stage, double sceneW, double sceneH) throws Exception
+	public void Month(Stage stage, double sceneW, double sceneH, Connection connection) throws Exception
 	{
 		//PNGs should be white
 		
@@ -72,7 +65,6 @@ public class MonthView extends KeyInfo
     	
         HBox ribbonButtons = new HBox(15);
         ribbonButtons.setAlignment(Pos.TOP_CENTER);
-        //ribbonButtons.setPrefSize(500, 500);
 
         Button menuButton = createButton(17.5, 17.5);
         Image icon = new Image("MenuIcon.png");
@@ -122,7 +114,6 @@ public class MonthView extends KeyInfo
         monthButton.setDisable(true);
         HBox dwm = new HBox(0);
         dwm.getChildren().addAll(dayButton, weekButton, monthButton);
-        //dwm.setAlignment(Pos.CENTER_RIGHT);
         Pane dwmPn = new Pane(dwm);
         dwm.setLayoutX(525.0);
         dwm.setLayoutY(22.75);
@@ -137,7 +128,6 @@ public class MonthView extends KeyInfo
     	{
     		Label lbl = new Label(getDayOfWeek(i, firstDayOfWeek).toUpperCase());
     		Font lblfont = Font.font("Onest", FontWeight.BLACK, 22);
-
             lbl.setStyle("-fx-text-fill: white;");
     		lbl.setAlignment(Pos.CENTER);
     		lbl.setFont(lblfont);
@@ -152,8 +142,8 @@ public class MonthView extends KeyInfo
     	for (int row = 0; row < 5; row++) {
             for (int col = 0; col < 7; col++)
             {
-            	Button dateclk;
-                if(countOfDays<=28) { dateclk = new Button(Integer.toString(countOfDays)); }
+            	Button dateclk; //on press, go to DayView
+                if(countOfDays<=28) dateclk = new Button(Integer.toString(countOfDays));
                 else dateclk = new Button();
             	dateclk.setAlignment(Pos.TOP_RIGHT);
             	dateclk.setId("dateclk");
@@ -173,6 +163,27 @@ public class MonthView extends KeyInfo
     	root.getChildren().addAll(ribbonPane, aMonthPane);
         stage.setScene(scene);
         stage.show();
+        
+        weekButton.setOnAction(event -> 
+    	{
+    		WeekView weekView = new WeekView();
+            try {
+				weekView.Week(stage, ribbonPane, weekdays, dayButton, weekButton, monthButton, monthYr, dwm, connection);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	});
+        dayButton.setOnAction(event -> 
+    	{
+    		DayView dayView = new DayView();
+            try {
+				dayView.Day(stage, ribbonPane, weekdays, dayButton, weekButton, monthButton, monthYr, dwm, connection);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	});
     }
 	
 }

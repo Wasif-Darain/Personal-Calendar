@@ -1,6 +1,7 @@
 package application;
 
-import javafx.animation.PauseTransition;
+import java.sql.Connection;
+
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -15,12 +16,12 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class SignUp extends MonthView {
-
+public class SignUp extends DBConnect
+{
 	@Override
 	public void start(Stage arg0) throws Exception { }
 	
-	protected static void SignupPage(Stage suStage, double sceneW, double sceneH) {
+	protected void SignupPage(Stage suStage, double sceneW, double sceneH, Connection connection) {
 		suStage.setTitle("Getting Started");
 		StackPane root=new StackPane();
     	root.setStyle("-fx-background-color: transparent;");
@@ -33,8 +34,10 @@ public class SignUp extends MonthView {
    		passwordLabel.setStyle(styleRegularLabel + "-fx-font-size: 16px;");
    		Label confPwLabel = new Label("Confirm Password:");
    		confPwLabel.setStyle(styleRegularLabel + "-fx-font-size: 16px;");
-   		Label emailLabel = new Label("Enter Email Address (Optional):");
+   		Label emailLabel = new Label("Enter Email Address:");
    		emailLabel.setStyle(styleRegularLabel + "-fx-font-size: 16px;");
+   		Label fdowLabel = new Label("Enter First Day of Week:");
+   		fdowLabel.setStyle(styleRegularLabel + "-fx-font-size: 16px;");
  		TextField nmField = new TextField();
     	nmField.setMaxWidth(500);
     	nmField.setMinHeight(30);
@@ -84,31 +87,6 @@ public class SignUp extends MonthView {
 		suB.setAlignment(Pos.CENTER);
 		//Center everything
 		
-		//what to do when Login is pressed
-		suButton.setOnAction(event -> {
-			String p1 = pwField.getText(), p2 = confPwField.getText();
-			if(!(p1.equals(p2))) {
-				suLabel.setText("Passwords don't match. Try again.");
-				pwField.clear();
-				confPwField.clear();
-			}
-			else {
-				dbConnect();
-				
-				suLabel.setText("Account creation succesful! Generating calendar...");
-				//isLoggedIn=true;
-				//PauseTransition pause = new PauseTransition(Duration.seconds(7));
-	            //pause.play();
-	            try {
-					MonthView monthView = new MonthView(); //Calendar generated
-					monthView.Month(suStage, sceneW, sceneH);
-				} catch (Exception e1) { //If fails to open that scene
-					// TODO Auto-generated catch block
-					e1.printStackTrace(); //Write more meaningful error messages
-				}
-			}
-		});
-		
 		VBox allVBox = new VBox(20);
         allVBox.getChildren().addAll(name, pass, c_pass, em, suButton, suLabel);
         allVBox.setAlignment(Pos.CENTER);
@@ -117,5 +95,28 @@ public class SignUp extends MonthView {
         suStage.getIcons().add(icon);
         suStage.setScene(scene);
         suStage.show();
+        
+      suButton.setOnAction(event -> {
+      			String p1 = pwField.getText(), p2 = confPwField.getText();
+      			if(!(p1.equals(p2))) {
+      				suLabel.setText("Passwords don't match. Try again.");
+      				pwField.clear();
+      				confPwField.clear();
+      			}
+      			else {
+      				DBConnect db = new DBConnect();
+      				db.saveUser(nmField.getText(), pwField.getText(), emailField.getText(), 0); //"0" for now
+      				
+      				suLabel.setText("Account creation succesful! Generating calendar...");
+      				db.setLoggedIn();
+      				//Might add some pause transition
+      	            try {
+      					MonthView monthView = new MonthView();
+      					monthView.Month(suStage, sceneW, sceneH, connection);
+      				} catch (Exception e1) {
+      					e1.printStackTrace(); //Write more meaningful error messages
+      				}
+      			}
+      	});
 	}
 }
