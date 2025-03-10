@@ -35,8 +35,6 @@
     -fx-border-radius: 0;
     -fx-border-color: white;
     -fx-border-width: 0px;
-    -fx-pref-width: 185px;
-    -fx-pref-height: 110px;
 }
 
 #dateclk:hover {

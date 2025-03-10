@@ -1,68 +1,117 @@
 package application;
 
-import java.awt.Rectangle;
-import java.awt.TextArea;
+import java.io.IOException;
 import java.sql.Connection;
-import java.time.MonthDay;
+import java.sql.SQLException;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.format.TextStyle;
+import java.util.Locale;
 
-import javafx.geometry.Pos;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 
-public class WeekView extends KeyInfo //change inh. if needed
-{
-	public static void start (String[] args) { launch(args); }
+public class WeekView extends KeyInfo {
+	public static void start (String[] args) { launch(args); } 
+	Parent root;
+	Stage stage;
+	protected LocalDate currWeekStart;
 	
-	public void Week(Stage stage, Pane ribbonPane, HBox weekdays, Button dayButton, Button weekButton, Button monthButton, Text weekNum,
-			         HBox dwm, Connection connection) throws Exception
+	public void Week(Stage wstage) throws Exception
 	{
-		//PNGs should be white
-		
-		//stage.setFullScreen(true);
-		//stage.setResizable(true); //May change this
-		//stage.getIcons().add(icon);
-		stage.setTitle("Notendar | Week View");
-				
-		Pane root = new Pane();
-		root.setStyle("-fx-background-color: transparent;");
-		    	
-    	stage.centerOnScreen();
-    	//Size too big to have top-right buttons
-    	Scene scene = new Scene(root, Screen.getPrimary().getBounds().getWidth(), Screen.getPrimary().getBounds().getHeight(), linear);
-	   	scene.getStylesheets().add(getClass().getResource("Style.css").toExternalForm());
-		
-		GridPane weekbox = new GridPane();
-		for (int day = 0; day < 7; day++) {
-			Button dateclk = new Button(); //In Button(), write the dates
-        	dateclk.setAlignment(Pos.TOP_CENTER);
-        	dateclk.setId("dateclk");
-        	dateclk.setStyle("-fx-pref-height: 550px");
-        	
-            weekbox.add(dateclk, day, 0);
-		}
-		
-		VBox aWeek = new VBox(5);
-    	aWeek.setStyle("-fx-background-color: transparent;");
-    	aWeek.getChildren().addAll(weekdays, weekbox);
-    	Pane aWeekPane = new Pane(aWeek);
-    	aWeekPane.setLayoutX(200);
-    	aWeekPane.setLayoutY(200);
-    	
-    	monthButton.setDisable(false);
-    	weekButton.setDisable(true);
-    	dayButton.setDisable(false);
-    	weekNum.setText("?th Week, Mar 2025"); //Update this
-    	dwm.setLayoutX(350.0);
-		
-		root.getChildren().addAll(ribbonPane, aWeekPane);
-		stage.setScene(scene);
-        stage.show();
+		stage = wstage;
+		try (Connection connection = DBConnect.getDataSource().getConnection()) {
+            System.out.println("Connection from WeekView established successfully.");
+            try {
+    				root = FXMLLoader.load(getClass().getResource("/WeekView.fxml"));
+    			} catch (IOException e) {
+    				// TODO Auto-generated catch block
+    				e.printStackTrace();
+    				System.out.println("Failed to load Week screen.");
+    			}
+    	    	Scene scene = new Scene(root, 1500, 800);
+    	    	stage.getIcons().add(icon);
+    	    	stage.setTitle("Notendar | Week View");
+    	    	scene.getStylesheets().add(getClass().getResource("Style.css").toExternalForm());
+    	    	
+    	    	currWeekStart = thisDate.with(DayOfWeek.MONDAY);
+    	    	
+    	    	//don't use current date after this
+    	    	Button prev = (Button) root.lookup("#w_prev");
+    	    	prev.setOnAction(e -> {
+    	    		currWeekStart = currWeekStart.minusWeeks(1);
+    		    	updateCalendar();
+    	    	});
+    	    	Button next = (Button) root.lookup("#w_next");
+    	    	next.setOnAction(e -> {
+    		    	currWeekStart = currWeekStart.plusWeeks(1);
+    		    	updateCalendar();
+    	    	});
+    	    	
+    	    	updateCalendar();
+    	    	
+    	    	stage.setScene(scene);
+    	    	stage.show();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
 	}
+	
+	private void updateNameTxt()
+	{
+		String monthName = currentDate.getMonth().getDisplayName(TextStyle.SHORT, Locale.ENGLISH);
+        String mnShort = monthName.substring(0, 3);
+	    String moYr = mnShort + " " + currentYearMonth.getYear();
+	    Text mn = (Text) root.lookup("#w_name");
+	    mn.setText(moYr);
+	}
+	
+	private void updateCalendar()
+	{
+		//Do sth to clear existing grid characs.
+		updateNameTxt();
+		
+		GridPane days = (GridPane) root.lookup("#w_days");
+		for (int i = 0; i < 7; i++) {
+            LocalDate currentDay = currWeekStart.plusDays(i); // Get the day for the current column
+            Button dayButton = new Button(currentDay.toString());
+            dayButton.setId("dateclk");
+            days.add(dayButton, i, 0);
+
+            dayButton.setOnAction(e -> {
+                try {
+					switchToDay(null);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+            });
+        }
+	}
+	public void switchToMonth(ActionEvent event) throws IOException {
+	  MonthView monthView= new MonthView();
+  	  try {
+		monthView.Month(stage);
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+    }
+	
+	public void switchToDay(ActionEvent event) throws IOException {
+		  DayView dv= new DayView();
+	  	  try {
+			dv.Day(stage);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	 }
+	
 }
